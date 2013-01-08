@@ -1,13 +1,26 @@
 SpreeCustomStoreEmail
 =====================
 
-Introduction goes here.
-
+Allows you to customize the e-mail using Mustache templates.
 
 Example
 =======
 
-Example goes here.
+Here's a sample template:
+
+```
+{{#order.line_items}}
+{{variant.product.name}} ({{quantity}}) = {{display_price}}
+{{/order.line_items}}
+
+Subtotal: {{order.display_item_total}}
+
+{{#order.adjustments}}
+Adjustment: {{label}} {{display_amount}}
+{{/order.adjustments}}
+```
+
+Total: {{order.display_total}}
 
 Testing
 -------

@@ -1,6 +1,7 @@
 module SpreeCustomStoreEmail
   class Engine < Rails::Engine
     require 'spree/core'
+    require 'mustache'
     isolate_namespace Spree
     engine_name 'spree_custom_store_email'
 
