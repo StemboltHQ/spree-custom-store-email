@@ -26,4 +26,8 @@ Spree::Order.class_eval do
     end
     hash
   end
+
+  def store_name
+    store.nil? ? Spree::Config[:site_name] : store.name
+  end
 end
