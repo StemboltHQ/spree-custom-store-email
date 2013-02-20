@@ -1,18 +1,20 @@
 require 'spec_helper'
 
 describe Spree::StoreEmailTemplate do
-  describe 'scopes' do
-    let!(:html_template) { create :store_email_template, :format => "html" }
-    let!(:text_template) { create :store_email_template, :format => "text" }
+  let!(:template) { create :store_email_template, mailer_class_name: "MyMailerClass", store_id: store.id, action: "action" }
+  let(:store) { mock_model Spree::Store, id: 1 }
 
-    describe '#html' do
-      subject { Spree::StoreEmailTemplate.html(nil) }
-      it { should == html_template }
+  describe '.search' do
+    context "when matching result exists" do
+      it "finds the result" do
+        Spree::StoreEmailTemplate.search("MyMailerClass", store, "action").should == template
+      end
     end
 
-    describe '#text' do
-      subject { Spree::StoreEmailTemplate.text(nil) }
-      it { should == text_template }
+    context "when matching result does not exist" do
+      it "returns nil" do
+        Spree::StoreEmailTemplate.search("nothing", store, "action").should be_nil
+      end
     end
   end
 end

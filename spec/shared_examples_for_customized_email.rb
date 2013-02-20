@@ -3,13 +3,7 @@ require 'spec_helper'
 shared_examples_for "customized_email" do
   let(:text_template) { nil }
   let(:html_template) { nil }
-  let(:template) { mock_model Spree::StoreEmailTemplate }
-
-  before do
-    Spree::StoreEmailTemplate.stub(:text) { text_template }
-    Spree::StoreEmailTemplate.stub(:html) { html_template }
-    template.stub(:template) { "tpl_text" }
-  end
+  let(:template) { create :store_email_template, text_template: text_template, html_template: html_template }
 
   context "when the text template does not exist" do
     it "renders the default template" do
@@ -18,15 +12,15 @@ shared_examples_for "customized_email" do
   end
 
   context "when the text template exists" do
-    let(:text_template) { template }
+    let(:text_template) { "text" }
 
     it "renders the custom template" do
-      subject.body.should == 'tpl_text'
+      subject.body.should == 'text'
     end
   end
 
   context "when the html template exists" do
-    let(:html_template) { template }
+    let(:html_template) { "html" }
 
     it "supplies a 2 part e-mail" do
       subject.parts.should have(2).parts
@@ -41,7 +35,7 @@ shared_examples_for "customized_email" do
     end
 
     it "uses the template for the html portion" do
-      subject.parts.first.body.should == 'tpl_text'
+      subject.parts.first.body.should == 'html'
     end
   end
 end

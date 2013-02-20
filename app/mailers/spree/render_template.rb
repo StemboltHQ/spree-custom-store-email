@@ -1,16 +1,15 @@
 module Spree::RenderTemplate
-  def render_email_template(template_params, format)
-    email_template = Spree::StoreEmailTemplate.html(template_params)
-    if email_template
+  def render_email_template(format, mailer_class_name, store, action)
+    email_template = Spree::StoreEmailTemplate.search(mailer_class_name, store, action)
+    if email_template.try(:html_template)
       format.html do
-        render :text => Mustache.render(email_template.template, mustache_params)
+        render :text => Mustache.render(email_template.html_template, mustache_params)
       end
     end
 
     format.text do
-      email_template = Spree::StoreEmailTemplate.text(template_params)
       if email_template
-        params = {:text => Mustache.render(email_template.template, mustache_params)}
+        params = {:text => Mustache.render(email_template.text_template, mustache_params)}
       end
       render(params || {})
     end
